@@ -19,6 +19,10 @@
 			target = obj; 
 	 	}
 		opts.scrollTarget = target;
+
+		if (opts.typeMethod == null) {
+			opts.typeMethod = 'POST';
+		}
 	 
 		return this.each(function() {
 		  $.fn.scrollPagination.init($(this), opts);
@@ -42,7 +46,7 @@
 		 }
 		 $(obj).children().attr('rel', 'loaded');
 		 $.ajax({
-			  type: 'POST',
+			  type: opts.typeMethod,
 			  url: opts.contentPage,
 			  data: opts.contentData,
 			  success: function(data){
