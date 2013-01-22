@@ -44,14 +44,14 @@
         url: opts.contentPage,
         data: opts.contentData,
         success: function (data) {
-          $(obj).append(data);
+          opts.onSuccess(obj, data);
           var objectsRendered = $(obj).children('[rel!=loaded]');
 
           if (opts.afterLoad != null) {
             opts.afterLoad(objectsRendered);
           }
         },
-        dataType: 'html'
+        dataType: opts.dataType
       });
     }
 
@@ -79,6 +79,10 @@
     'beforeLoad': null,
     'afterLoad': null,
     'scrollTarget': null,
-    'heightOffset': 0
+    'heightOffset': 0,
+    'dataType': 'html',
+    'onSuccess': function (obj, data) {
+      $(obj).append(data);
+    }
   };
 })(jQuery);
