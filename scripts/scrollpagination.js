@@ -39,10 +39,14 @@
         opts.beforeLoad();
       }
       $(obj).children().attr('rel', 'loaded');
+      contentData = opts.contentData;
+      if ($.isFunction(contentData)) {
+        contentData = opts.contentData();
+      }
       $.ajax({
         type: 'POST',
         url: opts.contentPage,
-        data: opts.contentData,
+        data: contentData,
         success: function (data) {
           opts.onSuccess(obj, data);
           var objectsRendered = $(obj).children('[rel!=loaded]');
