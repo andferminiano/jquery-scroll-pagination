@@ -26,9 +26,8 @@
 
   $.fn.stopScrollPagination = function () {
     return this.each(function () {
-      $(this).attr('scrollPagination', 'disabled');
+      $(this).prop('scrollPagination', false);
     });
-
   };
 
   $.fn.scrollPagination.loadContent = function (obj, opts) {
@@ -50,7 +49,6 @@
         success: function (data) {
           opts.onSuccess(obj, data);
           var objectsRendered = $(obj).children('[rel!=loaded]');
-
           if (opts.afterLoad != null) {
             opts.afterLoad(objectsRendered);
           }
@@ -63,10 +61,10 @@
 
   $.fn.scrollPagination.init = function (obj, opts) {
     var target = opts.scrollTarget;
-    $(obj).attr('scrollPagination', 'enabled');
+    $(this).prop('scrollPagination', true);
 
     $(target).scroll(function (event) {
-      if ($(obj).attr('scrollPagination') == 'enabled') {
+      if ($(obj).prop('scrollPagination')) {
         $.fn.scrollPagination.loadContent(obj, opts);
       } else {
         event.stopPropagation();
