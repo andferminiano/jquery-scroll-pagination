@@ -24,6 +24,12 @@
 
   };
 
+  $.fn.startScrollPagination = function () {
+    return this.each(function () {
+      $(this).prop('scrollPagination', true).trigger('scrollPaginationLoadContent');
+    });
+  };
+
   $.fn.stopScrollPagination = function () {
     return this.each(function () {
       $(this).prop('scrollPagination', false);
@@ -61,7 +67,10 @@
 
   $.fn.scrollPagination.init = function (obj, opts) {
     var target = opts.scrollTarget;
-    $(this).prop('scrollPagination', true);
+
+    $(obj).bind('scrollPaginationLoadContent', function () {
+      $.fn.scrollPagination.loadContent($(this), opts);
+    });
 
     $(target).scroll(function (event) {
       if ($(obj).prop('scrollPagination')) {
@@ -71,8 +80,7 @@
       }
     });
 
-    $.fn.scrollPagination.loadContent(obj, opts);
-
+    $(obj).startScrollPagination();
   };
 
   $.fn.scrollPagination.defaults = {
