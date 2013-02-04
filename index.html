@@ -11,7 +11,9 @@
 <script type="text/javascript">
 $(function(){
 	$('#content').scrollPagination({
-		'contentPage': 'democontent.html', // the url you are fetching the results
+		'contentPage': 'scripts/data.json', // the url you are fetching the results
+        'dataType': 'json',
+        'template': '<li style="opacity:0;-moz-opacity: 0;filter: alpha(opacity=0);"><p><%= title %></p></li>',
 		'contentData': {}, // these are the variables you can pass to the request, for example: children().size() to know which page you are
 		'scrollTarget': $(window), // who gonna scroll? in this example, the full window
 		'heightOffset': 10, // it gonna request when scroll is 10 pixels before the page ends
@@ -59,8 +61,9 @@ $(function(){
         <textarea readonly="readonly">
            $(function(){
                 $('#content').scrollPagination({
-                    'contentPage': 'democontent.html', // the url you are fetching the results
+                    'contentPage': 'democontent.html', // the url you are fetching the results, you can set dataType to json and use json as data
                     'contentData': {}, // these are the variables you can pass to the request, for example: children().size() to know which page you are
+                    'template': <%= title %>', // with built-in template engine 
                     'scrollTarget': $(window), // who gonna scroll? in this example, the full window
                     'heightOffset': 10, // it gonna request when scroll is 10 pixels before the page ends
                     'beforeLoad': function(){ // before load function, you can display a preloader div
