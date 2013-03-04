@@ -59,17 +59,23 @@
 	$.fn.scrollPagination.loadContent = function(obj, opts) {
 		var target = opts.scrollTarget;
 		var mayLoadContent = $(target).scrollTop() + opts.heightOffset >= $(obj).height() - $(target).height();
-		if(mayLoadContent) {
-			if(opts.beforeLoad != null) {
+		
+		if(mayLoadContent && (window.loading || typeof(window.loading) == 'undefined')) {
+			if(opts.beforeLoad !== null) {
 				opts.beforeLoad();
 			}
+			
 			$(obj).children().attr('rel', 'loaded');
 			$.ajax({
 				type: 'POST',
+				//async: false,
 				url: opts.contentPage,
 				data: opts.contentData,
+				beforeSend : function () {
+					window.loading = false;
+				},
 				success: function(data) {
-
+					window.loading = true;
 					if(opts.dataType == 'json') {
 						$.each(data, function(key, value) {
 							$(obj).append($.fn.scrollPagination.tmpl(opts.template, value));
@@ -81,7 +87,7 @@
 					var objectsRendered = $(obj).children('[rel!=loaded]');
 
 					if(opts.afterLoad != null) {
-						opts.afterLoad(objectsRendered);
+						opts.afterLoad(objectsRendered, data);
 					}
 				},
 				dataType: opts.dataType
@@ -95,7 +101,8 @@
 		$(obj).attr('scrollPagination', 'enabled');
 
 		$(target).scroll(function(event) {
-			if($(obj).attr('scrollPagination') == 'enabled') {
+
+			if($(obj).attr('scrollPagination') === 'enabled') {
 				$.fn.scrollPagination.loadContent(obj, opts);
 			} else {
 				event.stopPropagation();
