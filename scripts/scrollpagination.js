@@ -38,11 +38,11 @@
 	 var mayLoadContent = $(target).scrollTop()+opts.heightOffset >= $(document).height() - $(target).height();
 	 if (mayLoadContent){
 		 if (opts.beforeLoad != null){
-			opts.beforeLoad(); 
+			 if(!opts.beforeLoad()){ return }
 		 }
 		 $(obj).children().attr('rel', 'loaded');
 		 $.ajax({
-			  type: 'POST',
+			  type: 'GET',
 			  url: opts.contentPage,
 			  data: opts.contentData,
 			  success: function(data){
