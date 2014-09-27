@@ -6,13 +6,13 @@
 **	http://andersonferminiano.com/jqueryscrollpagination/
 **	You may use this script for free, but keep my credits.
 **	Thank you.
+**  fork by DivXPro.
 */
 
 (function( $ ){
 	 
 		 
  $.fn.scrollPagination = function(options) {
-  	
 		var opts = $.extend($.fn.scrollPagination.defaults, options);  
 		var target = opts.scrollTarget;
 		if (target == null){
@@ -42,18 +42,25 @@
 		 }
 		 $(obj).children().attr('rel', 'loaded');
 		 $.ajax({
-			  type: 'POST',
+			  type: 'GET',
 			  url: opts.contentPage,
 			  data: opts.contentData,
 			  success: function(data){
-				$(obj).append(data); 
-				var objectsRendered = $(obj).children('[rel!=loaded]');
-				
-				if (opts.afterLoad != null){
-					opts.afterLoad(objectsRendered);	
-				}
+			  	if (opts.type == 'html'){
+			  		$(obj).append(data); 
+					var objectsRendered = $(obj).children('[rel!=loaded]');
+					if (opts.afterLoad != null){
+						opts.afterLoad(objectsRendered);	
+					}
+			  	}
+			  	return data;
 			  },
-			  dataType: 'html'
+			  error: function(){
+			  	if(opts.errorLoad != null){
+			  		opts.errorLoad();
+			  	}
+			  }
+			  dataType: opts.type
 		 });
 	 }
 	 
@@ -61,8 +68,7 @@
   
   $.fn.scrollPagination.init = function(obj, opts){
 	 var target = opts.scrollTarget;
-	 $(obj).attr('scrollPagination', 'enabled');
-	
+	 $(obj).attr('scrollPagination', 'enabled');	
 	 $(target).scroll(function(event){
 		if ($(obj).attr('scrollPagination') == 'enabled'){
 	 		$.fn.scrollPagination.loadContent(obj, opts);		
@@ -80,8 +86,10 @@
       	 'contentPage' : null,
      	 'contentData' : {},
 		 'beforeLoad': null,
-		 'afterLoad': null	,
+		 'afterLoad': null,
+		 'errorLoad': null,
 		 'scrollTarget': null,
-		 'heightOffset': 0		  
+		 'heightOffset': 0,
+		 'type': 'html'	  
  };	
 })( jQuery );
