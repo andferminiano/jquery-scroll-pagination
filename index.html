@@ -15,7 +15,6 @@ $(function(){
 		'contentData': {}, // these are the variables you can pass to the request, for example: children().size() to know which page you are
 		'scrollTarget': $(window), // who gonna scroll? in this example, the full window
 		'heightOffset': 10, // it gonna request when scroll is 10 pixels before the page ends
-        'type': 'html',
 		'beforeLoad': function(){ // before load function, you can display a preloader div
 			$('#loading').fadeIn();	
 		},
@@ -23,7 +22,7 @@ $(function(){
 			 $('#loading').fadeOut();
 			 var i = 0;
 			 $(elementsLoaded).fadeInWithDelay();
-			 if ($('#content').children().size() > 10){ // if more than 100 results already loaded, then stop pagination (only for testing)
+			 if ($('#content').children().size() > 30){ // if more than 100 results already loaded, then stop pagination (only for testing)
 			 	$('#nomoreresults').fadeIn();
 				$('#content').stopScrollPagination();
 			 }

@@ -34,19 +34,27 @@
   };
   
   $.fn.scrollPagination.loadContent = function(obj, opts){
+  	 if ($(obj).prop('scrollPaginationOnLoading')){
+         return;
+     }
+
 	 var target = opts.scrollTarget;
 	 var mayLoadContent = $(target).scrollTop()+opts.heightOffset >= $(document).height() - $(target).height();
 	 if (mayLoadContent){
+	 	 $(obj).prop('scrollPaginationOnLoading', true);
+
 		 if (opts.beforeLoad != null){
 			opts.beforeLoad(); 
 		 }
 		 $(obj).children().attr('rel', 'loaded');
 		 $.ajax({
-			  type: 'GET',
+			  type: opts.method,
 			  url: opts.contentPage,
 			  data: opts.contentData,
 			  success: function(data){
-			  	if (opts.type == 'html'){
+			  	$(obj).prop('scrollPaginationOnLoading', false);
+
+			  	if (opts.dataType == 'html'){
 			  		$(obj).append(data); 
 					var objectsRendered = $(obj).children('[rel!=loaded]');
 					if (opts.afterLoad != null){
@@ -59,8 +67,8 @@
 			  	if(opts.errorLoad != null){
 			  		opts.errorLoad();
 			  	}
-			  }
-			  dataType: opts.type
+			  },
+			  dataType: opts.dataType
 		 });
 	 }
 	 
@@ -68,7 +76,9 @@
   
   $.fn.scrollPagination.init = function(obj, opts){
 	 var target = opts.scrollTarget;
-	 $(obj).attr('scrollPagination', 'enabled');	
+	 $(obj).attr('scrollPagination', 'enabled');
+	 $(obj).prop('scrollPaginationOnLoading', false);
+
 	 $(target).scroll(function(event){
 		if ($(obj).attr('scrollPagination') == 'enabled'){
 	 		$.fn.scrollPagination.loadContent(obj, opts);		
@@ -90,6 +100,7 @@
 		 'errorLoad': null,
 		 'scrollTarget': null,
 		 'heightOffset': 0,
-		 'type': 'html'	  
+		 'method': 'GET',
+		 'dataType': 'html'	  
  };	
 })( jQuery );
