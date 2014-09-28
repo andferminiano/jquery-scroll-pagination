@@ -6,7 +6,6 @@
 **	http://andersonferminiano.com/jqueryscrollpagination/
 **	You may use this script for free, but keep my credits.
 **	Thank you.
-**  fork by DivXPro.
 */
 
 (function( $ ){
