@@ -6,6 +6,7 @@
 **	http://andersonferminiano.com/jqueryscrollpagination/
 **	You may use this script for free, but keep my credits.
 **	Thank you.
+**  fork by DivXPro.
 */
 
 (function( $ ){
@@ -59,8 +60,11 @@
 					if (opts.afterLoad != null){
 						opts.afterLoad(objectsRendered);	
 					}
+			  	} else if (opts.dataType == 'json') {
+			  		if (opts.afterLoad != null){
+			  			opts.afterLoad(data);
+			  		}
 			  	}
-			  	return data;
 			  },
 			  error: function(){
 			  	if(opts.errorLoad != null){
