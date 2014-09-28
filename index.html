@@ -22,7 +22,7 @@ $(function(){
 			 $('#loading').fadeOut();
 			 var i = 0;
 			 $(elementsLoaded).fadeInWithDelay();
-			 if ($('#content').children().size() > 100){ // if more than 100 results already loaded, then stop pagination (only for testing)
+			 if ($('#content').children().size() > 30){ // if more than 100 results already loaded, then stop pagination (only for testing)
 			 	$('#nomoreresults').fadeIn();
 				$('#content').stopScrollPagination();
 			 }
@@ -99,6 +99,7 @@ $(function(){
     </ul>
     <div class="loading" id="loading">Wait a moment... it's loading!</div>
     <div class="loading" id="nomoreresults">Sorry, no more results for your pagination demo.</div>
+    <div class="loading" id="errloading">Something error, data load faile.</div>
 </div>
 </body>
 </html>
