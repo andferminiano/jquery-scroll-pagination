@@ -1,0 +1,96 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>jQuery ScrollPagination</title>
+<script type="text/javascript" src="scripts/jquery.min.js"></script>
+<script type="text/javascript" src="scripts/scrollpagination.js"></script>
+<link href="scrollpagination_demo.css" rel="stylesheet" media="screen" />
+<meta name="author" content="Anderson Ferminiano" />
+<meta name="keywords" content="jquery, plugin, anderson ferminiano, scroll, pagination, scroll pagination, html5" />
+<script type="text/javascript">
+$(function(){
+    var page = 1; // page number
+	$('#content').scrollPagination({
+		'contentPage': 'democontent.html', // the url you are fetching the results
+		'contentData': {}, // these are the variables you can pass to the request, for example: children().size() to know which page you are
+		'scrollTarget': $(window), // who gonna scroll? in this example, the full window
+		'heightOffset': 10, // it gonna request when scroll is 10 pixels before the page ends
+		'beforeLoad': function(){ // before load function, you can display a preloader div
+            if($('#blocked').val() == 1) {
+                    return false; /* Exit the function */
+            }else {
+                $('#blocked').val('1');
+                $('#loading').fadeIn();
+                this.contentData = {page:page}; // GET params for contentPage
+                return true; /* All ok proceed with function. Always return true or false */
+            }
+		},
+		'afterLoad': function(elementsLoaded){ // after loading content, you can use this function to animate your new elements
+             // fade prompt
+			 $('#loading').fadeOut();
+			 $(elementsLoaded).fadeInWithDelay();
+
+             if(elementsLoaded.length == 0 ){ // stop load more, when no more content
+                $('#nomoreresults').fadeIn();
+                $('#content').stopScrollPagination();
+             }
+
+             // block to wait next page request
+             $('#blocked').val('0');
+             page++;
+             // when content's height is too low, the scroll bar may not show at first time.
+             // so trigger scroll after load content.
+             $(window).scroll();
+
+		}
+	});
+
+    // Trigger pagination on load
+    // To replicate the issue commnt out the line below
+    $.event.trigger({type : 'pagination.start'});
+
+	// code for fade in element by element
+	$.fn.fadeInWithDelay = function(){
+		var delay = 0;
+		return this.each(function(){
+			$(this).delay(delay).animate({opacity:1}, 200);
+			delay += 100;
+		});
+	};
+
+});
+</script>
+</head>
+<body>
+<div id="scrollpaginationdemo">
+    <div class="about">
+        <h1>jQuery ScrollPagination - <a href="http://www.twitter.com/andferminiano" target="_blank">@andferminiano</a></h1>
+        <p>Official post in my <a href="http://www.andersonferminiano.com/blog/2012/07/jquery-scroll-pagination/" target="_blank">blog</a></p>
+        <p>jQuery ScrollPagination plugin has been developed by <a href="http://www.andersonferminiano.com" target="_blank">Anderson Ferminiano</a> for studying purposes, you may use it for free in any project you want, please maintain the credits.</p>
+
+    </div>
+	<ul id="content">
+    	<li><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc elementum elementum felis. Quisque porta turpis nec eros consectetur lacinia. Pellentesque sagittis adipiscing egestas. </p></li>
+    </ul>
+    <div class="loading" id="loading">Wait a moment... it's loading!</div>
+    <div class="loading" id="nomoreresults">Sorry, no more results for your pagination demo.</div>
+    <input type="hidden" value="0" id="blocked" />
+</div>
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<div class="bigFooter" style="height:240px; min-height:240px; background-color:#000000;">
+    <h1>Big Footer</h1>
+    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Maxime ex odio numquam maiores inventore voluptas, fugiat quidem praesentium et, illum placeat dolore rem atque libero sit accusantium, quia repellat asperiores!
+</div>
+</body>
+</html>
